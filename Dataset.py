@@ -1,45 +1,24 @@
 import os
-import pickle
+import numpy as np
 import torch
 from torch.utils.data import Dataset
-import numpy as np
 
-def pkload(path):
-    with open(path, 'rb') as f:
-        return pickle.load(f)
-
-def transform(data, label):
-    data = torch.from_numpy(data)
-    label = torch.tensor(label)
-    return data, label
-
-
-
-'''adni2'''
-class adni2(Dataset):  # train:MCI/NC  210/118=328   valid:53/29=82
-    def __init__(self, data, split, mode='train'):
-        data_path = os.path.join('Data',data+'_5split_' + mode + '_' + str(split) + '_data.npy')
-
-        label_path = os.path.join('Data',data+'_5split_' + mode + '_' + str(split) + '_label.pkl')
-        self.mode = mode
-        self.names, self.labels = pkload(label_path)
-        self.datas = np.load(data_path)
-
-
-    def __getitem__(self, item):  # original:1x130x90x6  -->to split easily: cut to 128  ->1x128x90x6
-        label = self.labels[item]
-        data = self.datas[item, :, :, :, :]
-        data, label = transform(data, label)
+class fMRI_Dataset(Dataset):
+    def __init__(self, data_dir, split, mode='train'):
+        #直接加载numpy格式的数据
+        self.data_path = os.path.join(data_dir, f"{mode}_split{split}_data.npy")
+        self.label_path = os.path.join(data_dir, f"{mode}_split{split}_label.npy")
+        
+        self.data = np.load(self.data_path)  # 形状: (N, 1, T, V, 1)
+        self.labels = np.load(self.label_path)  # 形状: (N,)
+    
+    def __getitem__(self, index):
+        data = torch.from_numpy(self.data[index]).float()
+        label = torch.tensor(self.labels[index], dtype=torch.long)
         return data, label
-
+    
     def __len__(self):
-        return len(self.names)
-
+        return len(self.data)
+    
     def get_num_class(self):
-        num = len(np.unique(self.labels))
-        return num
-
-if __name__ == '__main__':
-    train_data = adni2('sample',split=5, mode='train')
-    sample,lable=train_data.__getitem__(20)
-    print(sample.shape)
+        return len(np.unique(self.labels))
