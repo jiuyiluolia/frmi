@@ -1,28 +1,28 @@
-# CrossKT: Learning Asynchronous Common and Individual Functional Brain Network for AD Diagnosis(MICCAI 2023)
+# 基于同步-异步功能连接融合的脑疾病识别
 
+## 📌 项目简介
+本项目基于fMRI数据，提出一种融合同步与异步功能连接（FBN）的脑疾病识别方法，
+结合Transformer与注意力机制，实现对脑区动态连接关系的建模。
 
+## 🚀 方法特点
+- 同步功能连接（S-FBN）
+- 异步功能连接（A-FBN）
+- 时间分割机制（Temporal Segment）
+- 基于RBF核的注意力机制
+- 稀疏化脑网络建模
 
-# overview
+## 🧠 模型结构
+fMRI → 时间分割 → 异步建模 → 注意力 → 分类
 
-![image](framework.png)
-This code is for the paper: Learning Asynchronous Common and Individual Functional Brain Network for AD Diagnosis. 
-Experimental data sourced from ADNI datasets( https://adni.loni.usc.edu/).
- 
-# Quick start (Train and Test)
-We provide the code for our model here (`Model.py`), and training and testing code（`main.py`). The specific model settings can be found in the article's documentation.
-We have provided a sample of preprocessed fMRI participant data in the Data folder (randomly generated using Python). Please replace it with real data for the actual experiment.
-Before training the model, please configure the dependencies in the `requirements.txt`. Setting and modifying experimental parameters in `config.yaml`.
-You can run `main.py` to quickly train and test the program.
+## 📂 项目结构
+model/ 模型结构
+data/ 数据说明
+main.py 训练入口
 
+## ⚙️ 运行方式
+```bash
+pip install torch numpy
+python main.py
 
-
-
-# Citation
-If you use our method or any part of it in your research, please cite:
-
-@inproceedings{BarsoumICMI2016,
-    title={Training Deep Networks for Facial Expression Recognition with Crowd-Sourced Label Distribution},
-    author={Barsoum, Emad and Zhang, Cha and Canton Ferrer, Cristian and Zhang, Zhengyou},
-    booktitle={ACM International Conference on Multimodal Interaction (ICMI)},
-    year={2016}
-}
+📊 数据说明
+使用ADNI数据集（未公开上传）
